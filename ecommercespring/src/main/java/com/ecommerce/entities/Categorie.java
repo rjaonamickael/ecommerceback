@@ -26,6 +26,7 @@ public class Categorie implements Serializable {
     private String description;
     
     @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
+    @JsonManagedReference()
     private List<Produit> produits;
 
 	public Long getId() {

@@ -15,6 +15,7 @@ import com.ecommerce.entities.Categorie;
 import com.ecommerce.entities.Produit;
 import com.ecommerce.repositories.RepositoryCategorie;
 import com.ecommerce.repositories.RepositoryProduit;
+import com.ecommerce.requests.RequestAddProduit;
 import com.ecommerce.utils.FonctionsUtiles;
 
 @Service
@@ -99,10 +100,17 @@ public class ServiceAdmin {
 		return ResponseEntity.status(HttpStatus.OK).body(produit);
 	}
 
-	public ResponseEntity<Map<String, String>> addProduit(Produit produit) {
+	public ResponseEntity<Produit> addProduit(RequestAddProduit request) {
+		Produit produit = request.getProduit();
+		
+		Categorie categorie = repositoryCategorie.findById(request.getId_categorie())
+				.orElseThrow(() -> new NoSuchElementException("Categorie non trouvé"));
+		
+		produit.setCategorie(categorie);
+		
 		repositoryProduit.save(produit);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(functions.reponse(TYPE_MESSAGE, "Success"));
+		return ResponseEntity.status(HttpStatus.CREATED).body(produit);
 	}
 
 	public ResponseEntity<Map<String, String>> deleteProduit(Long id) {
@@ -112,10 +120,18 @@ public class ServiceAdmin {
 		return ResponseEntity.status(HttpStatus.OK).body(functions.reponse(TYPE_MESSAGE, "Success"));
 	}
 
-	public ResponseEntity<Map<String, String>> updateProduit(Produit produit) {
+	public ResponseEntity<Produit> updateProduit(Long id,RequestAddProduit request) {
+		Produit produit = request.getProduit();
+		
+		Categorie categorie = repositoryCategorie.findById(request.getId_categorie())
+				.orElseThrow(() -> new NoSuchElementException("Categorie non trouvé"));
+		
+		produit.setCategorie(categorie);
+		produit.setId(id);
+		
 		repositoryProduit.save(produit);
 
-		return ResponseEntity.status(HttpStatus.OK).body(functions.reponse(TYPE_MESSAGE, "Success"));
+		return ResponseEntity.status(HttpStatus.OK).body(produit);
 	}
 
 }

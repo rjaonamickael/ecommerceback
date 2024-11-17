@@ -1,10 +1,11 @@
 package com.ecommerce.restapi;
 
 import com.ecommerce.entities.Categorie;
+import com.ecommerce.entities.Produit;
+import com.ecommerce.requests.RequestAddProduit;
 import com.ecommerce.services.ServiceAdmin;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/admin/catalogue")
-public class CatalogueController {
+public class AdminController {
 	
 	@Autowired
     private ServiceAdmin serviceAdmin;
@@ -50,5 +51,47 @@ public class CatalogueController {
         
         return serviceAdmin.updateCategorie(id,categorie);
     }
+
+	
+	
+	
+	// END MAP Pour les Produits
+	@GetMapping("/produits")
+    public ResponseEntity<List<Produit>> getAllProduits() {
+        
+        return serviceAdmin.getAllProduits();
+    }
+	
+	@GetMapping("/produits/{nomProduit}")
+    public ResponseEntity< Map<Categorie, List<Produit> > > getAllProduitsByName(
+    																@PathVariable String nomProduit) {
+        
+        return serviceAdmin.getAllProduitsByName(nomProduit);
+    }
+	
+	@GetMapping("/produit/{id}")
+    public ResponseEntity<Produit> getProduit(@PathVariable Long id) {
+        
+        return serviceAdmin.getProduit(id);
+    }
+	
+	@PostMapping("/produit")
+    public ResponseEntity<Produit> addProduit(@RequestBody RequestAddProduit request) {
+        
+        return serviceAdmin.addProduit(request);
+    }
+	
+	@DeleteMapping("/produit/{id}")
+    public ResponseEntity<Map<String, String>> deleteProduit(@PathVariable Long id) {
+        
+        return serviceAdmin.deleteProduit(id);
+    }
+	
+	@PutMapping("/produit/{id}")
+    public ResponseEntity<Produit> updateProduit(@PathVariable Long id,@RequestBody RequestAddProduit request) {
+        
+        return serviceAdmin.updateProduit(id,request);
+    }
+
 
 }

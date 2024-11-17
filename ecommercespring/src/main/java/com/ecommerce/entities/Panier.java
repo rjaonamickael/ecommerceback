@@ -17,12 +17,14 @@ public class Panier implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "id_client", referencedColumnName = "id")
+    @JsonBackReference("Panier-Client")
     private Client client;
     
     @OneToOne(mappedBy = "panier", cascade = CascadeType.ALL)
     private Commande commande;
     
     @OneToMany(mappedBy = "panier", cascade = CascadeType.ALL)
+    @JsonManagedReference("Panier-ProduitPanier")
 	private List<ProduitPanier> produitPanier;
 
 	public Long getId() {
