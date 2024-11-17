@@ -8,12 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.entities.Client;
+import com.ecommerce.entities.Compte;
 import com.ecommerce.entities.Produit;
 import com.ecommerce.requests.RequestRegister;
 import com.ecommerce.services.ServiceInternaute;
@@ -36,9 +38,27 @@ public class InternauteController {
 	    return serviceInternaute.getAllProduitsByName(produit);
 	}
 	
-	@PostMapping("/inscription")
+	// Inscription client
+	@PostMapping("/inscription/client")
 	public  ResponseEntity< Client > register(@RequestBody RequestRegister request){
 		
-		return serviceInternaute.register(request);
+		return serviceInternaute.registerClient(request);
 	}
+	
+	
+	// Inscription admin
+	@PostMapping("/inscription/admin")
+    public ResponseEntity<Compte> register(@RequestBody Compte compte) {		
+
+        return serviceInternaute.registerAdmin(compte);
+    }
+	
+	
+	@GetMapping("/connecter")
+	public ResponseEntity<Map<String, String>> connect(@RequestParam String email, @RequestParam String password) {
+	    
+		return serviceInternaute.connect(email, password);
+	}
+
+
 }
