@@ -22,7 +22,7 @@ public class ProduitPanier implements Serializable {
 	
 	@ManyToOne
     @JoinColumn(name = "id_produit", referencedColumnName = "id")
-	@JsonBackReference()
+	@JsonBackReference("Produit-ProduitPanier")
 	private Produit	produit;
 	
 	@ManyToOne

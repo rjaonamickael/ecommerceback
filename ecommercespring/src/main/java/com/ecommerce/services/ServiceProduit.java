@@ -19,8 +19,8 @@ import com.ecommerce.requests.RequestAddProduit;
 import com.ecommerce.utils.FonctionsUtiles;
 
 @Service
-public class ServiceAdmin {
-
+public class ServiceProduit {
+	
 	@Autowired
 	private RepositoryCategorie repositoryCategorie;
 
@@ -31,42 +31,8 @@ public class ServiceAdmin {
 	private FonctionsUtiles functions;
 
 	private final String TYPE_MESSAGE = "message";
-
-	// SERVICE CATEGORIE
-	public ResponseEntity<List<Categorie>> getAllCategories() {
-		List<Categorie> categories = repositoryCategorie.findAll();
-
-		return ResponseEntity.status(HttpStatus.OK).body(categories);
-	}
-
-	public ResponseEntity<Categorie> getCategorie(Long id) {
-		Categorie categorie = repositoryCategorie.findById(id)
-				.orElseThrow(() -> new NoSuchElementException("Categorie non trouvé"));
-
-		return ResponseEntity.status(HttpStatus.OK).body(categorie);
-	}
-
-	public ResponseEntity<Categorie> addCategorie(Categorie categorie) {
-		repositoryCategorie.save(categorie);
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(categorie);
-	}
-
-	public ResponseEntity<Map<String, String>> deleteCategorie(Long id) {
-		repositoryCategorie.deleteById(id);
-		;
-
-		return ResponseEntity.status(HttpStatus.OK).body(functions.reponse(TYPE_MESSAGE, "Success"));
-	}
-
-	public ResponseEntity<Categorie> updateCategorie(Long id,Categorie categorie) {
-		categorie.setId(id);
-		repositoryCategorie.save(categorie);
-
-		return ResponseEntity.status(HttpStatus.OK).body(categorie);
-	}
-
-	// SERVICE PRODUIT
+	
+	
 	public ResponseEntity<List<Produit>> getAllProduits() {
 		List<Produit> produit = repositoryProduit.findAll();
 
