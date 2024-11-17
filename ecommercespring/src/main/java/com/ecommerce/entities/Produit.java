@@ -29,9 +29,11 @@ public class Produit implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "id_categorie", referencedColumnName = "id")
+    @JsonBackReference()
     private Categorie categorie;
     
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    @JsonManagedReference()
 	private List<ProduitPanier> produitPanier;
 
 	public Long getId() {

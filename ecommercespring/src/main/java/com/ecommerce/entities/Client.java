@@ -30,6 +30,7 @@ public class Client implements Serializable {
 	private Date date_naissance;
 	
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+	@JsonManagedReference("Panier-Adresse")
     private List<Adresse> adresses;
 	
 	@OneToOne
@@ -38,6 +39,7 @@ public class Client implements Serializable {
 	
 	
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+	@JsonManagedReference("Panier-Client")
     private List<Panier> paniers;
 
 	public Long getId() {
