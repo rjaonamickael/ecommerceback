@@ -3,7 +3,6 @@ package com.ecommerce.services;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,33 +11,39 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.entities.Categorie;
+import com.ecommerce.entities.Client;
+import com.ecommerce.entities.Compte;
 import com.ecommerce.entities.Produit;
 import com.ecommerce.repositories.RepositoryCategorie;
+import com.ecommerce.repositories.RepositoryClient;
+import com.ecommerce.repositories.RepositoryCompte;
 import com.ecommerce.repositories.RepositoryProduit;
-import com.ecommerce.requests.RequestAddProduit;
+import com.ecommerce.requests.RequestRegister;
 import com.ecommerce.utils.FonctionsUtiles;
+import com.ecommerce.exceptions.EmailNonDisponibleException;
 
 @Service
-public class ServiceProduit {
+public class ServiceInternaute {
 	
 	@Autowired
 	private RepositoryCategorie repositoryCategorie;
 
 	@Autowired
 	private RepositoryProduit repositoryProduit;
+	
+	@Autowired
+	private RepositoryCompte repositoryCompte;
 
+	@Autowired
+	private RepositoryClient repositoryClient;
+	
 	@Autowired
 	private FonctionsUtiles functions;
 
 	private final String TYPE_MESSAGE = "message";
 	
+
 	
-	public ResponseEntity<List<Produit>> getAllProduits() {
-		List<Produit> produit = repositoryProduit.findAll();
-
-		return ResponseEntity.status(HttpStatus.OK).body(produit);
-	}
-
 	public ResponseEntity< Map<Long, List<Produit> > > getAllProduitsByName(String nomProduit) {
 		List<Categorie> categories = repositoryCategorie.findAll();
 		List<Produit> produits = repositoryProduit.findByNomContaining(nomProduit);
@@ -59,45 +64,32 @@ public class ServiceProduit {
 		return ResponseEntity.status(HttpStatus.OK).body(produitsParCategorie);
 	}
 
-	public ResponseEntity<Produit> getProduit(Long id) {
-		Produit produit = repositoryProduit.findById(id)
-				.orElseThrow(() -> new NoSuchElementException("Produit non trouvé"));
-
-		return ResponseEntity.status(HttpStatus.OK).body(produit);
+	
+	public ResponseEntity< Client > register(RequestRegister request){
+		Compte compte = request.getCompte();
+		
+		if(isEmailused(compte.getEmail())) {
+			throw new EmailNonDisponibleException("Email non disponible");
+		}
+		
+		repositoryCompte.save(compte);
+		
+		Client client = request.getClient();
+		client.setCompte(compte);
+		
+		repositoryClient.save(client);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(client);
 	}
-
-	public ResponseEntity<Produit> addProduit(RequestAddProduit request) {
-		Produit produit = request.getProduit();
-		
-		Categorie categorie = repositoryCategorie.findById(request.getId_categorie())
-				.orElseThrow(() -> new NoSuchElementException("Categorie non trouvé"));
-		
-		produit.setCategorie(categorie);
-		
-		repositoryProduit.save(produit);
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(produit);
-	}
-
-	public ResponseEntity<Map<String, String>> deleteProduit(Long id) {
-		repositoryProduit.deleteById(id);
-		;
-
-		return ResponseEntity.status(HttpStatus.OK).body(functions.reponse(TYPE_MESSAGE, "Success"));
-	}
-
-	public ResponseEntity<Produit> updateProduit(Long id,RequestAddProduit request) {
-		Produit produit = request.getProduit();
-		
-		Categorie categorie = repositoryCategorie.findById(request.getId_categorie())
-				.orElseThrow(() -> new NoSuchElementException("Categorie non trouvé"));
-		
-		produit.setCategorie(categorie);
-		produit.setId(id);
-		
-		repositoryProduit.save(produit);
-
-		return ResponseEntity.status(HttpStatus.OK).body(produit);
+	
+	
+	private boolean isEmailused(String email) {
+		if(repositoryCompte.findCompteByEmail(email)!=null) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 }
