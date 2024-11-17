@@ -42,6 +42,9 @@ public class ServiceInternaute {
 
 	private final String TYPE_MESSAGE = "message";
 	
+	@Autowired
+	private ServiceMailing serviceMailing;
+	
 
 	
 	public ResponseEntity< Map<Long, List<Produit> > > getAllProduitsByName(String nomProduit) {
@@ -68,20 +71,30 @@ public class ServiceInternaute {
 	public ResponseEntity< Client > register(RequestRegister request){
 		Compte compte = request.getCompte();
 		
+		// Vérification si l'émail a déjà été utilisé par un autre utilisateur
 		if(isEmailused(compte.getEmail())) {
 			throw new EmailNonDisponibleException("Email non disponible");
 		}
+		// Enregistrement du compte
+		repositoryCompte.save(compte); 
 		
-		repositoryCompte.save(compte);
-		
+		//Association du compte au client
 		Client client = request.getClient();
 		client.setCompte(compte);
 		
+		// Enregistrement du client
 		repositoryClient.save(client);
+		
+		// Envoie de mail de confirmation
+		serviceMailing.confirmationInscription(compte.getEmail());
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(client);
 	}
-	
+
+	public ResponseEntity<Map<String, String>> connect(String email,String password){
+		
+		return ResponseEntity.status(HttpStatus.OK).body(functions.reponse(TYPE_MESSAGE, "succes"));
+	}
 	
 	private boolean isEmailused(String email) {
 		if(repositoryCompte.findCompteByEmail(email)!=null) {
