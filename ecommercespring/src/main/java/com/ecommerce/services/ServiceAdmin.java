@@ -12,11 +12,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.entities.Categorie;
+import com.ecommerce.entities.Compte;
 import com.ecommerce.entities.Produit;
+import com.ecommerce.exceptions.EmailNonDisponibleException;
 import com.ecommerce.repositories.RepositoryCategorie;
+import com.ecommerce.repositories.RepositoryCompte;
 import com.ecommerce.repositories.RepositoryProduit;
 import com.ecommerce.requests.RequestAddProduit;
 import com.ecommerce.utils.FonctionsUtiles;
+import com.ecommerce.utils.TypeCompte;
 
 @Service
 public class ServiceAdmin {
@@ -25,6 +29,12 @@ public class ServiceAdmin {
 
 	@Autowired
 	private RepositoryProduit repositoryProduit;
+	
+	@Autowired
+	private RepositoryCompte repositoryCompte;
+	
+	@Autowired
+	private ServiceMailing serviceMailing;
 
 	@Autowired
 	private FonctionsUtiles functions;
@@ -114,6 +124,7 @@ public class ServiceAdmin {
 
 		return ResponseEntity.status(HttpStatus.OK).body(produit);
 	}
+
 	
 	
 }

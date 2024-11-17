@@ -20,6 +20,7 @@ import com.ecommerce.repositories.RepositoryCompte;
 import com.ecommerce.repositories.RepositoryProduit;
 import com.ecommerce.requests.RequestRegister;
 import com.ecommerce.utils.FonctionsUtiles;
+import com.ecommerce.utils.TypeCompte;
 import com.ecommerce.exceptions.EmailNonDisponibleException;
 
 @Service
@@ -67,19 +68,18 @@ public class ServiceInternaute {
 		return ResponseEntity.status(HttpStatus.OK).body(produitsParCategorie);
 	}
 
-	
-	public ResponseEntity< Client > register(RequestRegister request){
+	public ResponseEntity< Client > registerClient(RequestRegister request){
 		Compte compte = request.getCompte();
+		Client client = request.getClient();
 		
 		// Vérification si l'émail a déjà été utilisé par un autre utilisateur
-		if(isEmailused(compte.getEmail())) {
+		if(functions.isEmailused(compte.getEmail())) {
 			throw new EmailNonDisponibleException("Email non disponible");
 		}
 		// Enregistrement du compte
 		repositoryCompte.save(compte); 
 		
 		//Association du compte au client
-		Client client = request.getClient();
 		client.setCompte(compte);
 		
 		// Enregistrement du client
@@ -91,18 +91,52 @@ public class ServiceInternaute {
 		return ResponseEntity.status(HttpStatus.CREATED).body(client);
 	}
 
+	public ResponseEntity<Compte> registerAdmin(Compte compte) {
+		// TODO Auto-generated method stub
+		// Vérification si l'émail a déjà été utilisé par un autre utilisateur
+		if(functions.isEmailused(compte.getEmail())) {
+			throw new EmailNonDisponibleException("Email non disponible");
+		}
+		compte.setType(TypeCompte.ADMINISTRATEUR);
+		// Enregistrement du compte
+		repositoryCompte.save(compte); 
+		
+		// Envoie de mail de confirmation
+		serviceMailing.confirmationInscription(compte.getEmail());
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(compte);
+	}
+	
 	public ResponseEntity<Map<String, String>> connect(String email,String password){
+		Compte compte = repositoryCompte.findCompteByEmail(email);
+		
+		if (compte == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            						.body(functions.reponse(TYPE_MESSAGE, "Compte inexistant"));
+        }
+		
+		if(!isPasswordCorrect(compte,password)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+					.body(functions.reponse(TYPE_MESSAGE, "Mot de passe incorrect"));
+		}
+		
+		
 		
 		return ResponseEntity.status(HttpStatus.OK).body(functions.reponse(TYPE_MESSAGE, "succes"));
 	}
 	
-	private boolean isEmailused(String email) {
-		if(repositoryCompte.findCompteByEmail(email)!=null) {
+	
+	private boolean isPasswordCorrect(Compte compte, String password) {
+		String correctPassword = compte.getPassword();
+		
+		if(correctPassword.equals(password)) {
 			return true;
 		}
 		else {
 			return false;
 		}
 	}
+	
+
 
 }

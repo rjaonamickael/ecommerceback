@@ -1,10 +1,14 @@
 package com.ecommerce.restapi;
 
 import com.ecommerce.entities.Categorie;
+import com.ecommerce.entities.Client;
+import com.ecommerce.entities.Compte;
 import com.ecommerce.entities.Produit;
+import com.ecommerce.exceptions.EmailNonDisponibleException;
 import com.ecommerce.requests.RequestAddProduit;
+import com.ecommerce.requests.RequestRegister;
 import com.ecommerce.services.ServiceAdmin;
-
+import com.ecommerce.services.ServiceInternaute;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +25,7 @@ public class AdminController {
 	
 	@Autowired
     private ServiceAdmin serviceAdmin;
-
+	
 
 	// END MAP Pour les Catégories
 	@GetMapping("/categories")
