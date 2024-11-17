@@ -27,7 +27,7 @@ public class Adresse implements Serializable {
 	
 	@ManyToOne
     @JoinColumn(name = "id_client", referencedColumnName = "id")
-	@JsonBackReference("Panier-Adresse")
+	@JsonBackReference("Client-Adresse")
     private Client client;
 
 	public Long getId() {
