@@ -62,12 +62,12 @@ public class AdminController {
         return serviceAdmin.getAllProduits();
     }
 	
-	@GetMapping("/produits/{nomProduit}")
-    public ResponseEntity< Map<Categorie, List<Produit> > > getAllProduitsByName(
-    																@PathVariable String nomProduit) {
-        
-        return serviceAdmin.getAllProduitsByName(nomProduit);
-    }
+	@GetMapping("/produits/rechercher")
+	public ResponseEntity<Map<Long, List<Produit>>> getAllProduitsByName(
+	        								@RequestParam(required = false, defaultValue = "") 
+	        								String produit) {
+	    return serviceAdmin.getAllProduitsByName(produit);
+	}
 	
 	@GetMapping("/produit/{id}")
     public ResponseEntity<Produit> getProduit(@PathVariable Long id) {

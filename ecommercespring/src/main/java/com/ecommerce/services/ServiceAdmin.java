@@ -73,12 +73,12 @@ public class ServiceAdmin {
 		return ResponseEntity.status(HttpStatus.OK).body(produit);
 	}
 
-	public ResponseEntity< Map<Categorie, List<Produit> > > getAllProduitsByName(String nomProduit) {
+	public ResponseEntity< Map<Long, List<Produit> > > getAllProduitsByName(String nomProduit) {
 		List<Categorie> categories = repositoryCategorie.findAll();
 		List<Produit> produits = repositoryProduit.findByNomContaining(nomProduit);
 
 		// Création d'une LinkedHashMap pour classer les produits produit par catégorie
-		Map<Categorie, List<Produit>> produitsParCategorie = new LinkedHashMap<>();
+		Map<Long, List<Produit>> produitsParCategorie = new LinkedHashMap<>();
 
 		// Organisation des produits par catégorie
 		for (Categorie categorie : categories) {
@@ -87,7 +87,7 @@ public class ServiceAdmin {
 					.filter(produit -> produit.getCategorie().getId() == categorie.getId()).collect(Collectors.toList());
 
 			// Ajouter la catégorie et ses produits triés dans la Map
-			produitsParCategorie.put(categorie, produitsDansCategorie);
+			produitsParCategorie.put(categorie.getId(), produitsDansCategorie);
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(produitsParCategorie);
