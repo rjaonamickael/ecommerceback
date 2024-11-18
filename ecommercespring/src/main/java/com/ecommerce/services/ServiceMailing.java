@@ -1,6 +1,5 @@
 package com.ecommerce.services;
 
-import java.io.IOException;
 import java.util.Properties;
 
 
@@ -15,6 +14,7 @@ import javax.mail.internet.MimeMessage;
 
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,7 +36,7 @@ public class ServiceMailing {
 	
 	private final String OBJECT_CONFIRMATION_COMMANDE = "Confirmation de votre commande";
 	
-	
+	@Async
 	public void confirmationInscription(String email) {
 		String contenu;
 		

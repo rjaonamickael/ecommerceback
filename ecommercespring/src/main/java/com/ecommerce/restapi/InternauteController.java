@@ -59,7 +59,7 @@ public class InternauteController {
 	
 	@Transactional
 	@PostMapping("/connecter")
-	public ResponseEntity<Map<String, String>> connect(@RequestBody RequestConnect request) {
+	public ResponseEntity<?> connect(@RequestBody RequestConnect request) {
 	    
 		return serviceInternaute.connect(request);
 	}

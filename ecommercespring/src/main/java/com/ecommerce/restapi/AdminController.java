@@ -1,5 +1,7 @@
 package com.ecommerce.restapi;
 
+import com.ecommerce.dto.DTOCategorie;
+import com.ecommerce.dto.DTOProduit;
 import com.ecommerce.entities.Categorie;
 import com.ecommerce.entities.Client;
 import com.ecommerce.entities.Compte;
@@ -30,7 +32,7 @@ public class AdminController {
 
 	// END MAP Pour les Catégories
 	@GetMapping("/categories")
-    public ResponseEntity<List<Categorie>> getAllCategories() {
+    public ResponseEntity<List<DTOCategorie>> getAllCategories() {
         
         return serviceAdmin.getAllCategories();
     }
@@ -67,7 +69,7 @@ public class AdminController {
 	
 	// END MAP Pour les Produits
 	@GetMapping("/produits")
-    public ResponseEntity<List<Produit>> getAllProduits() {
+    public ResponseEntity<List<DTOProduit>> getAllProduits() {
         
         return serviceAdmin.getAllProduits();
     }

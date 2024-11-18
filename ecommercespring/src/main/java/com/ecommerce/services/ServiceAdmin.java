@@ -4,13 +4,15 @@ package com.ecommerce.services;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ecommerce.dto.DTOCategorie;
+import com.ecommerce.dto.DTOProduit;
 import com.ecommerce.entities.Categorie;
 import com.ecommerce.entities.Produit;
 import com.ecommerce.repositories.RepositoryCategorie;
@@ -34,8 +36,10 @@ public class ServiceAdmin {
 	
 	
 	// GESTION CATEGORIE
-	public ResponseEntity<List<Categorie>> getAllCategories() {
-		List<Categorie> categories = repositoryCategorie.findAll();
+	public ResponseEntity<List<DTOCategorie>> getAllCategories() {
+		List<DTOCategorie> categories = repositoryCategorie.findAll().stream()
+		           .map(DTOCategorie::toDTOCategorie)
+		           .collect(Collectors.toList());
 
 		return ResponseEntity.status(HttpStatus.OK).body(categories);
 	}
@@ -69,8 +73,10 @@ public class ServiceAdmin {
 	
 	
 	// GESTION PRODUIT
-	public ResponseEntity<List<Produit>> getAllProduits() {
-		List<Produit> produit = repositoryProduit.findAll();
+	public ResponseEntity<List<DTOProduit>> getAllProduits() {
+		List<DTOProduit> produit = repositoryProduit.findAll().stream()
+		           .map(DTOProduit::toDTOProduit)
+		           .collect(Collectors.toList());
 
 		return ResponseEntity.status(HttpStatus.OK).body(produit);
 	}
@@ -115,7 +121,6 @@ public class ServiceAdmin {
 
 		return ResponseEntity.status(HttpStatus.OK).body(produit);
 	}
-
 	
 	
 }
