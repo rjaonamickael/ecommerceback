@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -16,6 +17,7 @@ import jakarta.persistence.OneToMany;
 
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Categorie implements Serializable {
     
     @Id
@@ -26,7 +28,7 @@ public class Categorie implements Serializable {
     private String description;
     
     @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
-    @JsonManagedReference("Categorie-Produit")
+    @JsonIgnoreProperties("Categorie-Produit")
     private List<Produit> produits;
 
 	public Long getId() {

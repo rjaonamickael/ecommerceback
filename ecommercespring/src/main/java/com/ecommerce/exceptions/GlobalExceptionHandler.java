@@ -18,8 +18,6 @@ public class GlobalExceptionHandler {
 	@Autowired
 	private FonctionsUtiles functions;
 
-	private final String TYPE_ERROR = "error";
-	
 	// ERREUR REPONSE QUAND EMAIL EXISTANT
     @ExceptionHandler(EmailNonDisponibleException.class)
     @ResponseStatus(HttpStatus.CONFLICT)			// CONFLICT création de ressource avec des données déjà existantes.
@@ -27,7 +25,7 @@ public class GlobalExceptionHandler {
 		
 		
         return ResponseEntity.status(HttpStatus.CONFLICT)
-        						.body(functions.reponse(TYPE_ERROR,ex.getMessage()));
+        						.body(functions.response_error(ex.getMessage()));
     }
     
     // Erreur quand findById ne retourne aucun objet
@@ -37,7 +35,7 @@ public class GlobalExceptionHandler {
     	
 		
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-        						.body(functions.reponse(TYPE_ERROR,ex.getMessage()));
+        						.body(functions.response_error(ex.getMessage()));
     }
     
 //    // Erreur non classifié

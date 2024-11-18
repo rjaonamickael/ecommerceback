@@ -1,10 +1,10 @@
 package com.ecommerce.services;
 
-import java.util.LinkedHashMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,15 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.entities.Categorie;
-import com.ecommerce.entities.Compte;
 import com.ecommerce.entities.Produit;
-import com.ecommerce.exceptions.EmailNonDisponibleException;
 import com.ecommerce.repositories.RepositoryCategorie;
-import com.ecommerce.repositories.RepositoryCompte;
 import com.ecommerce.repositories.RepositoryProduit;
 import com.ecommerce.requests.RequestAddProduit;
 import com.ecommerce.utils.FonctionsUtiles;
-import com.ecommerce.utils.TypeCompte;
+
 
 @Service
 public class ServiceAdmin {
@@ -29,17 +26,11 @@ public class ServiceAdmin {
 
 	@Autowired
 	private RepositoryProduit repositoryProduit;
-	
-	@Autowired
-	private RepositoryCompte repositoryCompte;
-	
-	@Autowired
-	private ServiceMailing serviceMailing;
 
 	@Autowired
 	private FonctionsUtiles functions;
 
-	private final String TYPE_MESSAGE = "message";
+	
 	
 	
 	// GESTION CATEGORIE
@@ -66,7 +57,7 @@ public class ServiceAdmin {
 		repositoryCategorie.deleteById(id);
 		;
 
-		return ResponseEntity.status(HttpStatus.OK).body(functions.reponse(TYPE_MESSAGE, "Success"));
+		return ResponseEntity.status(HttpStatus.OK).body(functions.response_message("Success"));
 	}
 
 	public ResponseEntity<Categorie> updateCategorie(Long id,Categorie categorie) {
@@ -108,7 +99,7 @@ public class ServiceAdmin {
 		repositoryProduit.deleteById(id);
 		;
 
-		return ResponseEntity.status(HttpStatus.OK).body(functions.reponse(TYPE_MESSAGE, "Success"));
+		return ResponseEntity.status(HttpStatus.OK).body(functions.response_message("Success"));
 	}
 
 	public ResponseEntity<Produit> updateProduit(Long id,RequestAddProduit request) {
