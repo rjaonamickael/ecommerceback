@@ -52,7 +52,6 @@ public class ServiceInternaute {
 	private ServiceMailing serviceMailing;
 	
 
-	
 	public ResponseEntity< Map<Long, List<Produit>> > getAllProduitsByName(String nomProduit) {
 		List<Categorie> categories = repositoryCategorie.findAll();
 		List<Produit> produits = repositoryProduit.findByNomContaining(nomProduit);
@@ -141,8 +140,10 @@ public class ServiceInternaute {
 									.body(functions.response_message("Mot de passe incorrect"));
 		}
 		
-		// ASSOCIATION DU PANIER
+		// ASSOCIATION DU PANIER 
 		Client client = compte.getClient();
+		
+		// 
 		
 		
 		return ResponseEntity.status(HttpStatus.OK).body(functions.response_message("succes"));

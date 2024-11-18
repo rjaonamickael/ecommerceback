@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,6 +20,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Client implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +36,7 @@ public class Client implements Serializable {
 	private Date date_naissance;
 	
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-	@JsonManagedReference("Client-Adresse")
+	@JsonIgnoreProperties("Client-Adresse")
     private List<Adresse> adresses;
 	
 	@OneToOne
@@ -41,7 +45,7 @@ public class Client implements Serializable {
 	
 	
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-	@JsonManagedReference("Client-Panier")
+	@JsonIgnoreProperties("Client-Panier")
     private List<Panier> paniers;
 
 	public Long getId() {

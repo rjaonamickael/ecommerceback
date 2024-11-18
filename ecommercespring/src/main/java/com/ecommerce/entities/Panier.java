@@ -7,9 +7,13 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Panier implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,14 +21,14 @@ public class Panier implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "id_client", referencedColumnName = "id")
-    @JsonBackReference("Client-Panier")
+    @JsonIgnoreProperties("Client-Panier")
     private Client client;
     
     @OneToOne(mappedBy = "panier", cascade = CascadeType.ALL)
     private Commande commande;
     
     @OneToMany(mappedBy = "panier", cascade = CascadeType.ALL)
-    @JsonManagedReference("Panier-ProduitPanier")
+    @JsonIgnoreProperties("Panier-ProduitPanier")
 	private List<ProduitPanier> produitPanier;
 
 	public Long getId() {

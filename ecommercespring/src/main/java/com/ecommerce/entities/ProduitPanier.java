@@ -3,6 +3,10 @@ package com.ecommerce.entities;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ProduitPanier implements Serializable {
 	
 	@Id
@@ -22,12 +27,12 @@ public class ProduitPanier implements Serializable {
 	
 	@ManyToOne
     @JoinColumn(name = "id_produit", referencedColumnName = "id")
-	@JsonBackReference("Produit-ProduitPanier")
+	@JsonIgnoreProperties("Produit-ProduitPanier")
 	private Produit	produit;
 	
 	@ManyToOne
     @JoinColumn(name = "id_panier", referencedColumnName = "id")
-	@JsonBackReference("Panier-ProduitPanier")     	/// Quand il y a 2 ou plusieurs JsonBackReference dans une 
+	@JsonIgnoreProperties("Panier-ProduitPanier")     	/// Quand il y a 2 ou plusieurs JsonBackReference dans une 
 	private Panier	panier;							/// seule classe, il faut étiquetté la référence
 
 	public Long getId() {

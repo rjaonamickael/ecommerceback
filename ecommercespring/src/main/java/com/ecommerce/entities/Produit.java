@@ -35,7 +35,7 @@ public class Produit implements Serializable {
     private Categorie categorie;
     
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
-    @JsonManagedReference("Produit-ProduitPanier")
+    @JsonIgnoreProperties("Produit-ProduitPanier")
 	private List<ProduitPanier> produitPanier;
 
 	public Long getId() {

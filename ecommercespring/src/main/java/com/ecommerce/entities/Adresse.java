@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 import com.ecommerce.utils.TypeAdresse;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Adresse implements Serializable {
 	
 	@Id
@@ -27,7 +32,7 @@ public class Adresse implements Serializable {
 	
 	@ManyToOne
     @JoinColumn(name = "id_client", referencedColumnName = "id")
-	@JsonBackReference("Client-Adresse")
+	@JsonIgnoreProperties("Client-Adresse")
     private Client client;
 
 	public Long getId() {
