@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -19,6 +20,7 @@ import jakarta.persistence.OneToMany;
 
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Produit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +31,7 @@ public class Produit implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "id_categorie", referencedColumnName = "id")
-    @JsonBackReference("Categorie-Produit")
+    @JsonIgnoreProperties("Categorie-Produit")
     private Categorie categorie;
     
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
