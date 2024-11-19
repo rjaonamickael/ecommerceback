@@ -44,7 +44,7 @@ public class DTOPanier {
 		DTOPanier dto = new DTOPanier();
 		
 		dto.setId(panier.getId());
-		dto.setClient(DTOClient.fromClient(panier.getClient()));
+		dto.setClient(DTOClient.toDTOClient(panier.getClient()));
 		dto.setProduitPaniers(panier.getProduitPanier().stream()
                 .map(DTOProduitPanier::toDTOProduitPanier)
                 .collect(Collectors.toList()));

@@ -32,7 +32,6 @@ public class Adresse implements Serializable {
 	
 	@ManyToOne
     @JoinColumn(name = "id_client", referencedColumnName = "id")
-	@JsonIgnoreProperties("Client-Adresse")
     private Client client;
 
 	public Long getId() {

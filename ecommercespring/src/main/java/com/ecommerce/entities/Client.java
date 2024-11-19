@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -33,11 +34,11 @@ public class Client implements Serializable {
 
 	private String phone;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
 	@Column(columnDefinition = "DATE")
 	private Date date_naissance;
 	
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("Client-Adresse")
     private List<Adresse> adresses;
 	
 	@OneToOne
