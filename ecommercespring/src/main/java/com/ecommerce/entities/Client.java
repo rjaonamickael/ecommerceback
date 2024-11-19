@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -41,6 +42,7 @@ public class Client implements Serializable {
 	
 	@OneToOne
 	@JoinColumn(name = "id_compte", referencedColumnName = "id")
+	@JsonManagedReference()
 	private Compte compte;
 	
 	
