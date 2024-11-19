@@ -20,7 +20,6 @@ import jakarta.persistence.OneToMany;
 
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Produit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,11 +30,9 @@ public class Produit implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "id_categorie", referencedColumnName = "id")
-    @JsonIgnoreProperties("Categorie-Produit")
     private Categorie categorie;
     
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("Produit-ProduitPanier")
 	private List<ProduitPanier> produitPanier;
 
 	public Long getId() {

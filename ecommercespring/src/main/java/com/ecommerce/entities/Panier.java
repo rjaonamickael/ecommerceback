@@ -28,7 +28,6 @@ public class Panier implements Serializable {
     private Commande commande;
     
     @OneToMany(mappedBy = "panier", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("Panier-ProduitPanier")
 	private List<ProduitPanier> produitPanier;
 
 	public Long getId() {

@@ -27,13 +27,11 @@ public class ProduitPanier implements Serializable {
 	
 	@ManyToOne
     @JoinColumn(name = "id_produit", referencedColumnName = "id")
-	@JsonIgnoreProperties("Produit-ProduitPanier")
 	private Produit	produit;
 	
 	@ManyToOne
-    @JoinColumn(name = "id_panier", referencedColumnName = "id")
-	@JsonIgnoreProperties("Panier-ProduitPanier")     	/// Quand il y a 2 ou plusieurs JsonBackReference dans une 
-	private Panier	panier;							/// seule classe, il faut étiquetté la référence
+    @JoinColumn(name = "id_panier", referencedColumnName = "id")    	
+	private Panier	panier;							
 
 	public Long getId() {
 		return id;

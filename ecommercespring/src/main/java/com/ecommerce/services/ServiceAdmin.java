@@ -17,7 +17,7 @@ import com.ecommerce.entities.Categorie;
 import com.ecommerce.entities.Produit;
 import com.ecommerce.repositories.RepositoryCategorie;
 import com.ecommerce.repositories.RepositoryProduit;
-import com.ecommerce.requests.RequestAddProduit;
+import com.ecommerce.requests_responses.RequestAddProduit;
 import com.ecommerce.utils.FonctionsUtiles;
 
 
