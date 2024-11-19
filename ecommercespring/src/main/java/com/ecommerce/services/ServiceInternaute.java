@@ -15,11 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.dto.DTOPanier;
+import com.ecommerce.entities.Adresse;
 import com.ecommerce.entities.Categorie;
 import com.ecommerce.entities.Client;
 import com.ecommerce.entities.Compte;
 import com.ecommerce.entities.Panier;
 import com.ecommerce.entities.Produit;
+import com.ecommerce.repositories.RepositoryAdresse;
 import com.ecommerce.repositories.RepositoryCategorie;
 import com.ecommerce.repositories.RepositoryClient;
 import com.ecommerce.repositories.RepositoryCompte;
@@ -46,6 +48,9 @@ public class ServiceInternaute {
 
 	@Autowired
 	private RepositoryClient repositoryClient;
+	
+	@Autowired
+	private RepositoryAdresse repositoryAdresse;
 	
 	@Autowired
 	private RepositoryPanier repositoryPanier;
@@ -84,7 +89,7 @@ public class ServiceInternaute {
 	public ResponseEntity< Client > registerClient(RequestRegister request){
 		Compte compte = request.getCompte();
 		Client client = request.getClient();
-		
+		List<Adresse> adresses = client.getAdresses();
 		// Vérification si l'émail a déjà été utilisé par un autre utilisateur
 		if(isEmailused(compte.getEmail())) {
 			throw new EmailNonDisponibleException("Email non disponible");
@@ -97,6 +102,14 @@ public class ServiceInternaute {
 		
 		// Enregistrement du client
 		repositoryClient.save(client);
+		
+		// Enregistrement des adresses
+		for(Adresse adresse : adresses) {
+			adresse.setClient(client);
+			repositoryAdresse.save(adresse);
+		}
+		
+		
 		
 		// Création d'un nouveau panier prêt à recevoir des produits du client
 		Panier panier = new Panier();

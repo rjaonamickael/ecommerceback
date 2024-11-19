@@ -25,7 +25,7 @@ import com.ecommerce.services.ServiceInternaute;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/internaute")
-public class InternauteController {
+public class RestControllerInternaute {
 	
 	@Autowired
     private ServiceInternaute serviceInternaute;

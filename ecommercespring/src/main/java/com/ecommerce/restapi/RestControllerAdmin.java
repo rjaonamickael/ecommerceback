@@ -24,7 +24,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/admin/catalogue")
-public class AdminController {
+public class RestControllerAdmin {
 	
 	@Autowired
     private ServiceAdmin serviceAdmin;
