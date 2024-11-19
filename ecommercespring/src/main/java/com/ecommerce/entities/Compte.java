@@ -3,6 +3,7 @@ package com.ecommerce.entities;
 import java.io.Serializable;
 
 import com.ecommerce.utils.TypeCompte;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -27,6 +28,7 @@ public class Compte implements Serializable {
 	private String password;
 	
 	@OneToOne(mappedBy = "compte", cascade = CascadeType.ALL)
+	@JsonBackReference()
 	private Client client;
 	
 	

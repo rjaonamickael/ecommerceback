@@ -3,6 +3,7 @@ package com.ecommerce.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ecommerce.entities.Client;
 import com.ecommerce.entities.Panier;
 
 /*
@@ -17,6 +18,7 @@ import com.ecommerce.entities.Panier;
 public class DTOPanier {
 	
 	private Long id;
+	private DTOClient client;
 	private List<DTOProduitPanier> produitPaniers;
 	
 	public Long getId() {
@@ -24,6 +26,12 @@ public class DTOPanier {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public DTOClient getClient() {
+		return client;
+	}
+	public void setClient(DTOClient client) {
+		this.client = client;
 	}
 	public List<DTOProduitPanier> getProduitPaniers() {
 		return produitPaniers;
@@ -36,6 +44,7 @@ public class DTOPanier {
 		DTOPanier dto = new DTOPanier();
 		
 		dto.setId(panier.getId());
+		dto.setClient(DTOClient.fromClient(panier.getClient()));
 		dto.setProduitPaniers(panier.getProduitPanier().stream()
                 .map(DTOProduitPanier::toDTOProduitPanier)
                 .collect(Collectors.toList()));
