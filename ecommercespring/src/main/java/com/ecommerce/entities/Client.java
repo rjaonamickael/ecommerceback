@@ -43,12 +43,11 @@ public class Client implements Serializable {
 	
 	@OneToOne
 	@JoinColumn(name = "id_compte", referencedColumnName = "id")
-	@JsonManagedReference()
+	@JsonManagedReference
 	private Compte compte;
 	
 	
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("Client-Panier")
     private List<Panier> paniers;
 
 	public Long getId() {
