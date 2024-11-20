@@ -1,4 +1,4 @@
-package com.ecommerce.requests_responses;
+package com.ecommerce.requests;
 
 import com.ecommerce.entities.Compte;
 import com.ecommerce.entities.Panier;

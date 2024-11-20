@@ -21,7 +21,6 @@ public class Panier implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "id_client", referencedColumnName = "id")
-    @JsonIgnoreProperties("Client-Panier")
     private Client client;
     
     @OneToOne(mappedBy = "panier", cascade = CascadeType.ALL)

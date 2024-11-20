@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.entities.Client;
 import com.ecommerce.entities.Compte;
 import com.ecommerce.entities.Produit;
-import com.ecommerce.requests_responses.RequestConnect;
-import com.ecommerce.requests_responses.RequestRegister;
+import com.ecommerce.requests.RequestConnect;
+import com.ecommerce.requests.RequestRegister;
 import com.ecommerce.services.ServiceInternaute;
 
 @RestController

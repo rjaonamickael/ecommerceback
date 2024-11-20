@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,6 +27,8 @@ public class Commande implements Serializable {
     
     private String numero_carte;
     
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
+	@Column(columnDefinition = "DATE")
     private Date date_exp;
     
     private int cc;

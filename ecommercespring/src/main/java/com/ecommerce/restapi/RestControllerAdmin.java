@@ -7,8 +7,8 @@ import com.ecommerce.entities.Client;
 import com.ecommerce.entities.Compte;
 import com.ecommerce.entities.Produit;
 import com.ecommerce.exceptions.EmailNonDisponibleException;
-import com.ecommerce.requests_responses.RequestAddProduit;
-import com.ecommerce.requests_responses.RequestRegister;
+import com.ecommerce.requests.RequestAddProduit;
+import com.ecommerce.requests.RequestRegister;
 import com.ecommerce.services.ServiceAdmin;
 import com.ecommerce.services.ServiceInternaute;
 

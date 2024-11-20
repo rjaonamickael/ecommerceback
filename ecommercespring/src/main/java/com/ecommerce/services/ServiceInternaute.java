@@ -28,8 +28,8 @@ import com.ecommerce.repositories.RepositoryCompte;
 import com.ecommerce.repositories.RepositoryPanier;
 import com.ecommerce.repositories.RepositoryProduit;
 import com.ecommerce.repositories.RepositoryProduitPanier;
-import com.ecommerce.requests_responses.RequestConnect;
-import com.ecommerce.requests_responses.RequestRegister;
+import com.ecommerce.requests.RequestConnect;
+import com.ecommerce.requests.RequestRegister;
 import com.ecommerce.utils.FonctionsUtiles;
 import com.ecommerce.utils.TypeCompte;
 import com.ecommerce.exceptions.EmailNonDisponibleException;
@@ -200,12 +200,14 @@ public class ServiceInternaute {
 	}
 	
 	private void gestionPanier(Client client, Panier panier) {
-		Panier panierClient = client.getPaniers().getLast();
+		//System.out.println("zer"+client.getPaniers().size());
+		Panier dernierPanier = client.getPaniers().getLast();
+		
 		
 		// Ajout des Produits du panier web dans le panier du client
 		if(panier != null) {
 			panier.getProduitPanier().forEach(p -> {
-				p.setPanier(panierClient);
+				p.setPanier(dernierPanier);
 				repositoryProduitPanier.save(p);
 				//panierClient.getProduitPanier().add(p);
 				});

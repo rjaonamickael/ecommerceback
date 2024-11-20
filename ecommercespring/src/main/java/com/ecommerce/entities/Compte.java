@@ -28,7 +28,7 @@ public class Compte implements Serializable {
 	private String password;
 	
 	@OneToOne(mappedBy = "compte", cascade = CascadeType.ALL)
-	@JsonBackReference()
+	@JsonBackReference
 	private Client client;
 	
 	
