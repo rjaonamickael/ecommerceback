@@ -146,7 +146,9 @@ public class ServiceInternaute {
 		String passwordRequest = request.getCompte().getPassword();
 		
 		
-		Compte compte = repositoryCompte.findCompteByEmail(emailRequest);
+		Compte compte = repositoryCompte.findCompteByEmail(emailRequest)
+											.orElseThrow(() -> new EmailNonDisponibleException("Email non disponible"));
+		
 		Client client = compte.getClient();
 		Panier panier = request.getPanier();
 		

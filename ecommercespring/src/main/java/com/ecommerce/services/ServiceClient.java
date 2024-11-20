@@ -1,5 +1,6 @@
 package com.ecommerce.services;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.ecommerce.entities.Categorie;
 import com.ecommerce.entities.Client;
 import com.ecommerce.entities.Commande;
 import com.ecommerce.entities.Panier;
+import com.ecommerce.entities.ProduitPanier;
 import com.ecommerce.repositories.RepositoryAdresse;
 import com.ecommerce.repositories.RepositoryClient;
 import com.ecommerce.repositories.RepositoryCommande;
@@ -36,6 +38,9 @@ public class ServiceClient {
 	
 	@Autowired
 	private RepositoryProduitPanier repositoryProduitPanier;
+	
+	@Autowired
+	private ServiceMailing serviceMailing;
 	
 	
 	public ResponseEntity<DTOClient> getClient(Long id) {
@@ -60,13 +65,11 @@ public class ServiceClient {
 		Panier panierBd = repositoryPanier.findById(panierWeb.getId())
 											.orElseThrow(() -> new NoSuchElementException("Panier non trouvé"));
 		
-		// Mise à jour du panier dans la base
-		miseAJourPanier(panierBd,panierWeb);
+		// Mise à jour du panier et de la commande dans la base 
+		miseAJourPanier(panierBd,panierWeb,commande);
 		
-		// Liaison de la commande et le panier du client
-		panierWeb.setClient(panierBd.getClient());
-		commande.setPanier(panierWeb);
-		repositoryCommande.save(commande);
+		// Envoie de l'émail de confirmation de commande
+		serviceMailing.confirmationCommande(panierBd.getClient().getCompte().getEmail(), commande);
 		
 		// Création d'un nouveau panier prêt à recevoir des produits magasiner par le client
 		Panier nouveauPanier = new Panier();
@@ -76,19 +79,27 @@ public class ServiceClient {
 		return ResponseEntity.status(HttpStatus.OK).body(DTOCommande.toDTOCommande(commande));
 	}
 	
-	public void miseAJourPanier(Panier panierBd, Panier panierWeb) {
-		// Suppression des produits du panier du client
-		panierBd.getProduitPanier().forEach(p -> repositoryProduitPanier.deleteById(p.getId()));
+	public void miseAJourPanier(Panier panierBd, Panier panierWeb, Commande commande) {
 		
-		// Synchronisation du vidage du panier dans la base
-		panierBd.getProduitPanier().clear();
-		repositoryPanier.save(panierBd);
-		
-		
-		// Remplacement des produits du panier du client par ceux du panier web
+		// Vidage du panier du client si il contient des produits	
+		if(panierBd.getProduitPanier().size() != 0) {
+			// Suppression des produits du panier du client
+			panierBd.getProduitPanier().forEach(p -> repositoryProduitPanier.deleteById(p.getId()));
+			
+			// Synchronisation du vidage du panier dans la base
+			panierBd.getProduitPanier().clear();
+			repositoryPanier.save(panierBd);
+		}
+	
+		// Insertion des produits du panier du client par ceux du panier web
 		panierWeb.getProduitPanier().forEach(p -> {
 												p.setPanier(panierWeb);
 												repositoryProduitPanier.save(p);});
+		
+		// Liaison de la commande et le panier du client
+		panierWeb.setClient(panierBd.getClient());
+		commande.setPanier(panierWeb);
+		repositoryCommande.save(commande);
 		
 	}
 	

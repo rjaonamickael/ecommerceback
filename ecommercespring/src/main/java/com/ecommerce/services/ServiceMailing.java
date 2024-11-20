@@ -17,6 +17,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.ecommerce.dto.DTOPanier;
+import com.ecommerce.dto.DTOProduitPanier;
+import com.ecommerce.entities.Commande;
+import com.ecommerce.entities.ProduitPanier;
+
 @Service
 public class ServiceMailing {
 	
@@ -44,6 +49,17 @@ public class ServiceMailing {
 		
 		sendMail(email, OBJECT_CONFIRMATION_INSCRIPTION, contenu);
 	}
+	
+	@Async
+	public void confirmationCommande(String email, Commande commande) {
+		
+		String contenu = contenuMailConfirmation(commande);
+		
+		// Envoi du mail
+		sendMail(email, OBJECT_CONFIRMATION_INSCRIPTION, contenu);
+	}
+	
+	
 	
 	private void sendMail(String dest, String object, String text) {
 		// Activer explicitement TLSv1.2 et TLSv1.3
@@ -82,7 +98,7 @@ public class ServiceMailing {
 			message.setSubject(object);
 
 			// Ajout du corps de l'email
-			message.setText(text);
+			message.setContent(text, "text/html; charset=UTF-8");
 			Transport.send(message);
 			
 		} catch (MessagingException e) {
@@ -90,5 +106,39 @@ public class ServiceMailing {
 			e.printStackTrace();
 		}
 	}
- 
+	
+	private String contenuMailConfirmation(Commande commande) {
+		String contenu = "";
+		contenu += "<p>Bonjour " + commande.getPanier().getClient().getPrenom() + " " + commande.getPanier().getClient().getNom() + ",</p>";
+		contenu += "<p>Ceci est un mail de confirmation et voici les détails de votre commande :</p>";
+		contenu += "<table border='1' style='border-collapse: collapse; width: 100%;'>";
+		contenu += "<thead>";
+		contenu += "<tr>";
+		contenu += "<th style='padding: 8px; text-align: left;'>Nom</th>";
+		contenu += "<th style='padding: 8px; text-align: left;'>Quantité</th>";
+		contenu += "<th style='padding: 8px; text-align: left;'>Prix unitaire ($)</th>";
+		contenu += "<th style='padding: 8px; text-align: left;'>Prix total ($)</th>";
+		contenu += "</tr>";
+		contenu += "</thead>";
+		contenu += "<tbody>";
+
+		double prixTotal = 0;
+		for (ProduitPanier produitPanier : commande.getPanier().getProduitPanier()) {
+		    double prixProduitTotal = produitPanier.getProduit().getPrix() * produitPanier.getQuantite();
+		    contenu += "<tr>";
+		    contenu += "<td style='padding: 8px;'>" + produitPanier.getProduit().getNom() + "</td>";
+		    contenu += "<td style='padding: 8px;'>" + produitPanier.getQuantite() + "</td>";
+		    contenu += "<td style='padding: 8px;'>" + produitPanier.getProduit().getPrix() + "</td>";
+		    contenu += "<td style='padding: 8px;'>" + prixProduitTotal + "</td>";
+		    contenu += "</tr>";
+		    prixTotal += prixProduitTotal;
+		}
+
+		contenu += "</tbody>";
+		contenu += "</table>";
+		contenu += "<p style='margin-top: 20px;'>Prix total de la commande : <strong>" + prixTotal + " $</strong></p>";
+
+		
+		return contenu;
+	}
 }
