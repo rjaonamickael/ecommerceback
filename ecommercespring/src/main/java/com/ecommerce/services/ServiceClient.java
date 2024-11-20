@@ -64,6 +64,7 @@ public class ServiceClient {
 		miseAJourPanier(panierBd,panierWeb);
 		
 		// Liaison de la commande et le panier du client
+		panierWeb.setClient(panierBd.getClient());
 		commande.setPanier(panierWeb);
 		repositoryCommande.save(commande);
 		
