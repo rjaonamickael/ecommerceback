@@ -64,7 +64,7 @@ public class ServiceClient {
 		miseAJourPanier(panierBd,panierWeb);
 		
 		// Liaison de la commande et le panier du client
-		commande.setPanier(panierBd);
+		commande.setPanier(panierWeb);
 		repositoryCommande.save(commande);
 		
 		// Création d'un nouveau panier prêt à recevoir des produits magasiner par le client
@@ -86,8 +86,9 @@ public class ServiceClient {
 		
 		// Remplacement des produits du panier du client par ceux du panier web
 		panierWeb.getProduitPanier().forEach(p -> {
-												p.setPanier(panierBd);
+												p.setPanier(panierWeb);
 												repositoryProduitPanier.save(p);});
+		
 	}
 	
 }
